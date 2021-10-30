@@ -14,6 +14,8 @@ const (
 	kayeteRequestId   = "Kayete_PP234"
 	atropoteRequestId = "atropote_AA930"
 	acmeRequestId     = "acme_AAAAA"
+
+	timeLayout = "2006-01-02"
 )
 
 type StatsUnitSuite struct {
@@ -87,10 +89,41 @@ func (s *StatsUnitSuite) TestShouldReturnMaximizedProfitStatsWhenFourBookingRequ
 	s.Require().Equal(12.0, maximizedProfitStats.MaxNight())
 }
 
-func (s *StatsUnitSuite) parseTimeFromDateString(dateString string) time.Time {
-	t, err := time.Parse("2006-01-02", dateString)
+func (s StatsUnitSuite) parseTimeFromDateString(dateString string) time.Time {
+	t, err := time.Parse(timeLayout, dateString)
 	s.Require().NoError(err)
 
 	return t
+}
+
+func BenchmarkStats(b *testing.B) {
+	bookataCheckIn, _ := time.Parse(timeLayout, "2020-01-01")
+	bookingRequests := []domain.BookingRequest {
+		domain.NewBookingRequest(bookataRequestId, bookataCheckIn, 5, 200, 20),
+	}
+
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		domain.NewStats(bookingRequests)
+	}
+}
+
+func BenchmarkMaximize(b *testing.B) {
+	bookataCheckIn, _ := time.Parse(timeLayout, "2020-01-01")
+	kayeteCheckIn, _ := time.Parse(timeLayout, "2020-01-04")
+	atropoteCheckIn, _ := time.Parse(timeLayout, "2020-01-04")
+	acmeCheckIn, _ := time.Parse(timeLayout, "2020-01-10")
+
+	bookingRequests := []domain.BookingRequest {
+		domain.NewBookingRequest(bookataRequestId, bookataCheckIn, 5, 200, 20),
+		domain.NewBookingRequest(kayeteRequestId, kayeteCheckIn, 4, 156, 5),
+		domain.NewBookingRequest(atropoteRequestId, atropoteCheckIn, 4, 150, 6),
+		domain.NewBookingRequest(acmeRequestId, acmeCheckIn, 4, 160, 30),
+	}
+
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		domain.NewMaximizedProfitStats(bookingRequests)
+	}
 }
 

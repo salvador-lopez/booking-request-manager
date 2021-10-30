@@ -9,16 +9,18 @@ type Stats struct {
 }
 
 func NewStats(bookingRequests []BookingRequest) Stats {
+	s := Stats{bookingRequests: bookingRequests}
+
 	var totalProfit float64
 	var totalProfitPerNight float64
 	var minNight float64
 	var maxNight float64
 
 	for i, bookingRequest := range bookingRequests {
-		profitPerNight := Stats{}.calculateProfitPerNight(bookingRequest)
+		profitPerNight := s.calculateProfitPerNight(bookingRequest)
 		totalProfitPerNight += profitPerNight
 
-		profit := Stats{}.calculateProfit(bookingRequest)
+		profit := s.calculateProfit(bookingRequest)
 		totalProfit += profit
 
 		if i == 0 {
@@ -37,13 +39,12 @@ func NewStats(bookingRequests []BookingRequest) Stats {
 		}
 	}
 
-	return Stats{
-		bookingRequests: bookingRequests,
-		avgNight:        totalProfitPerNight / float64(len(bookingRequests)),
-		minNight:        minNight,
-		maxNight:        maxNight,
-		totalProfit:     totalProfit,
-	}
+	s.avgNight = totalProfitPerNight / float64(len(bookingRequests))
+	s.minNight = minNight
+	s.maxNight = maxNight
+	s.totalProfit = totalProfit
+
+	return s
 }
 
 func (s Stats) calculateProfit(bookingRequest BookingRequest) float64 {
@@ -55,19 +56,13 @@ func (s Stats) calculateProfitPerNight(bookingRequest BookingRequest) float64 {
 }
 
 func NewMaximizedProfitStats(bookingRequests []BookingRequest) Stats {
-	return NewStats(Stats{}.calculateBestRequestsCombination(bookingRequests))
-}
-
-func (s Stats) calculateBestRequestsCombination(bookingRequests []BookingRequest) []BookingRequest {
 	noOverlappingCombinations := make([][]BookingRequest, len(bookingRequests))
 	for i, bookingRequest := range bookingRequests {
 		noOverlappingCombinations[i] = append(noOverlappingCombinations[i], bookingRequest)
 		for j := i+1; j < len(bookingRequests); j++ {
-			overlaps := false
+			var overlaps bool
 			for _, bookingRequestToCheckOverlap := range noOverlappingCombinations[i] {
-				if bookingRequests[j].Overlaps(bookingRequestToCheckOverlap) {
-					overlaps = true
-				}
+				overlaps = bookingRequests[j].Overlaps(bookingRequestToCheckOverlap)
 			}
 			if !overlaps {
 				noOverlappingCombinations[i] = append(noOverlappingCombinations[i], bookingRequests[j])
@@ -76,16 +71,17 @@ func (s Stats) calculateBestRequestsCombination(bookingRequests []BookingRequest
 	}
 
 	var maxTotalProfit float64
-	var bestRequestCombination []BookingRequest
+	var maxProfitStats Stats
 
 	for _, noOverlappingCombination := range noOverlappingCombinations {
-		totalProfit := s.calculateTotalProfit(noOverlappingCombination)
-		if maxTotalProfit < totalProfit {
-			maxTotalProfit = totalProfit
-			bestRequestCombination = noOverlappingCombination
+		stats := NewStats(noOverlappingCombination)
+		if maxTotalProfit < stats.totalProfit {
+			maxTotalProfit = stats.totalProfit
+			maxProfitStats = stats
 		}
 	}
-	return bestRequestCombination
+
+	return maxProfitStats
 }
 
 func (s Stats) calculateTotalProfit(bookingRequests []BookingRequest) float64 {
