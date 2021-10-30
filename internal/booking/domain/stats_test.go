@@ -16,15 +16,15 @@ const (
 	acmeRequestId     = "acme_AAAAA"
 )
 
-type UnitSuite struct {
+type StatsUnitSuite struct {
 	suite.Suite
 }
 
-func TestSuite(t *testing.T) {
-	suite.Run(t, new(UnitSuite))
+func TestStatsSuite(t *testing.T) {
+	suite.Run(t, new(StatsUnitSuite))
 }
 
-func (s *UnitSuite) TestShouldReturnStatsAsExpectedWhenTwoBookingRequestsAreProvided() {
+func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenTwoBookingRequestsAreProvided() {
 	var bookingRequests []domain.BookingRequest
 
 	bookataCheckIn := s.parseTimeFromDateString("2020-01-01")
@@ -41,7 +41,7 @@ func (s *UnitSuite) TestShouldReturnStatsAsExpectedWhenTwoBookingRequestsAreProv
 	s.Require().Equal(bookingRequests, stats.BookingRequests())
 }
 
-func (s *UnitSuite) TestShouldReturnStatsAsExpectedWhenThreeBookingRequestsAreProvided() {
+func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenThreeBookingRequestsAreProvided() {
 	var bookingRequests []domain.BookingRequest
 
 	bookataCheckIn := s.parseTimeFromDateString("2020-01-01")
@@ -60,7 +60,7 @@ func (s *UnitSuite) TestShouldReturnStatsAsExpectedWhenThreeBookingRequestsArePr
 	s.Require().Equal(bookingRequests, stats.BookingRequests())
 }
 
-func (s *UnitSuite) TestShouldReturnMaximizedProfitStatsWhenFourBookingRequestsAreProvided() {
+func (s *StatsUnitSuite) TestShouldReturnMaximizedProfitStatsWhenFourBookingRequestsAreProvided() {
 	var bookingRequests []domain.BookingRequest
 
 	bookataCheckIn := s.parseTimeFromDateString("2020-01-01")
@@ -87,7 +87,7 @@ func (s *UnitSuite) TestShouldReturnMaximizedProfitStatsWhenFourBookingRequestsA
 	s.Require().Equal(12.0, maximizedProfitStats.MaxNight())
 }
 
-func (s *UnitSuite) parseTimeFromDateString(dateString string) time.Time {
+func (s *StatsUnitSuite) parseTimeFromDateString(dateString string) time.Time {
 	t, err := time.Parse("2006-01-02", dateString)
 	s.Require().NoError(err)
 
