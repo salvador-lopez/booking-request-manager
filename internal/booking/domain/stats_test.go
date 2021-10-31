@@ -55,8 +55,8 @@ func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenThreeBookingRequests
 	bookingRequests = append(bookingRequests, domain.NewBookingRequest(kayeteRequestId, kayeteSecondCheckIn, 1, 50, 20))
 	stats := domain.NewStats(bookingRequests)
 
-	s.Require().Equal(10.796666666666667, stats.AvgNight())
-	s.Require().Equal(10.0, stats.MinNight())
+	s.Require().Equal(10.8, stats.AvgNight())
+	s.Require().Equal(float64(10), stats.MinNight())
 	s.Require().Equal(12.1, stats.MaxNight())
 	s.Require().Equal(32.39, stats.TotalProfit())
 	s.Require().Equal(bookingRequests, stats.BookingRequests())

@@ -20,6 +20,7 @@ func (c *PostStatsController) Run(context *gin.Context) {
 	err := context.ShouldBind(&bookingRequests)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 	commandResult, err := c.calculateStatsCommandHandler.Handle(stats.CalculateStatsCommand{BookingRequests: bookingRequests})
 	if err != nil {
@@ -28,6 +29,7 @@ func (c *PostStatsController) Run(context *gin.Context) {
 			statusCode = http.StatusBadRequest
 		}
 		context.JSON(statusCode, err.Error())
+		return
 	}
 
 	context.JSON(http.StatusOK, commandResult)

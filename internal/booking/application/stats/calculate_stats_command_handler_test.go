@@ -49,9 +49,9 @@ func (s *UnitSuite) TestCalculateStatsAsExpectedWhenCommandHaveTwoBookingRequest
 
 	commandResult, err := s.sut.Handle(command)
 	s.Require().NoError(err)
-	expectedCommandResult := CalculateStatsCommandResult{
+	expectedCommandResult := &CalculateStatsCommandResult{
 		AvgNight: 8.29,
-		MinNight: 8.0,
+		MinNight: 8,
 		MaxNight: 8.58,
 	}
 	s.Require().Equal(expectedCommandResult, commandResult)

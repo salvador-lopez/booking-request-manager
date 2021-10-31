@@ -1,5 +1,7 @@
 package domain
 
+import "math"
+
 type Stats struct {
 	bookingRequests []BookingRequest
 	avgNight    float64
@@ -39,10 +41,10 @@ func NewStats(bookingRequests []BookingRequest) Stats {
 		}
 	}
 
-	s.avgNight = totalProfitPerNight / float64(len(bookingRequests))
-	s.minNight = minNight
-	s.maxNight = maxNight
-	s.totalProfit = totalProfit
+	s.avgNight = s.roundFloatValue(totalProfitPerNight / float64(len(bookingRequests)))
+	s.minNight = s.roundFloatValue(minNight)
+	s.maxNight = s.roundFloatValue(maxNight)
+	s.totalProfit = s.roundFloatValue(totalProfit)
 
 	return s
 }
@@ -112,4 +114,8 @@ func (s Stats) MaxNight() float64 {
 
 func (s Stats) TotalProfit() float64 {
 	return s.totalProfit
+}
+
+func (s Stats) roundFloatValue(value float64) float64 {
+	return math.Round(value*100)/100
 }
