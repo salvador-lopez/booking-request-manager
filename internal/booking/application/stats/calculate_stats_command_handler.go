@@ -14,11 +14,11 @@ func NewCalculateStatsCommandHandler() *CalculateStatsCommandHandler {
 }
 
 type BookingRequest struct {
-	RequestId   string
-	CheckIn     string
-	Nights      int
-	SellingRate int
-	Margin      int
+	RequestId   string `json:"request_id" binding:"required"`
+	CheckIn     string `json:"check_in" binding:"required"`
+	Nights      int    `json:"nights" binding:"required"`
+	SellingRate int    `json:"selling_rate" binding:"required"`
+	Margin      int    `json:"margin" binding:"required"`
 }
 
 type CalculateStatsCommand struct {
@@ -26,20 +26,20 @@ type CalculateStatsCommand struct {
 }
 
 type CalculateStatsCommandResult struct {
-	AvgNight float64
-	MinNight float64
-	MaxNight float64
+	AvgNight float64 `json:"avg_night"`
+	MinNight float64 `json:"min_night"`
+	MaxNight float64 `json:"max_night"`
 }
 
-func (s CalculateStatsCommandHandler) Handle(command CalculateStatsCommand) (CalculateStatsCommandResult, error) {
+func (s CalculateStatsCommandHandler) Handle(command CalculateStatsCommand) (*CalculateStatsCommandResult, error) {
 	bookingRequestVOs, err := s.buildBookingRequestVOs(command)
 	if err != nil {
-		return CalculateStatsCommandResult{}, err
+		return nil, err
 	}
 
 	stats := domain.NewStats(bookingRequestVOs)
 
-	return CalculateStatsCommandResult{
+	return &CalculateStatsCommandResult{
 		AvgNight: stats.AvgNight(),
 		MinNight: stats.MinNight(),
 		MaxNight: stats.MaxNight(),
