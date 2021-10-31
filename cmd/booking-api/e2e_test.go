@@ -37,7 +37,7 @@ func (s *E2eSuite) TestCalculateStatsAsExpected() {
 
 	select {
 	case <- serverHealthCheckOk:
-		statsRequest, err := os.ReadFile("test_stats_request.json")
+		statsRequest, err := os.ReadFile("test-data/stats_request.json")
 		s.Require().NoError(err)
 
 		response, err := http.Post("http://127.0.0.1:8080/stats", "application/json", bytes.NewBuffer(statsRequest))
@@ -46,7 +46,7 @@ func (s *E2eSuite) TestCalculateStatsAsExpected() {
 		s.Require().Equal(http.StatusOK, response.StatusCode)
 		respBody, err := ioutil.ReadAll(response.Body)
 		s.Require().NoError(err)
-		respBodyExpected, err := os.ReadFile("test_stats_response.json")
+		respBodyExpected, err := os.ReadFile("test-data/stats_response.json")
 		s.Require().NoError(err)
 		s.Require().Equal(string(respBodyExpected), string(respBody))
 	case <-time.After(time.Second * 5):
