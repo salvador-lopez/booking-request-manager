@@ -1,28 +1,20 @@
 package stats
 
 import (
+	"booking-request-manager/internal/booking/application"
 	"booking-request-manager/internal/booking/domain"
-	"errors"
-	"fmt"
-	"time"
 )
 
-type CalculateStatsCommandHandler struct {}
-
-func NewCalculateStatsCommandHandler() *CalculateStatsCommandHandler {
-	return &CalculateStatsCommandHandler{}
+type CalculateStatsCommandHandler struct {
+	bookingRequestTransformer *application.BookingRequestTransformer
 }
 
-type BookingRequest struct {
-	RequestId   string `json:"request_id" binding:"required"`
-	CheckIn     string `json:"check_in" binding:"required"`
-	Nights      int    `json:"nights" binding:"required"`
-	SellingRate int    `json:"selling_rate" binding:"required"`
-	Margin      int    `json:"margin" binding:"required"`
+func NewCalculateStatsCommandHandler(bookingRequestTransformer *application.BookingRequestTransformer) *CalculateStatsCommandHandler {
+	return &CalculateStatsCommandHandler{bookingRequestTransformer: bookingRequestTransformer}
 }
 
 type CalculateStatsCommand struct {
-	BookingRequests []BookingRequest
+	BookingRequests []*application.BookingRequest
 }
 
 type CalculateStatsCommandResult struct {
@@ -31,8 +23,8 @@ type CalculateStatsCommandResult struct {
 	MaxNight float64 `json:"max_night"`
 }
 
-func (s CalculateStatsCommandHandler) Handle(command CalculateStatsCommand) (*CalculateStatsCommandResult, error) {
-	bookingRequestVOs, err := s.buildBookingRequestVOs(command)
+func (h *CalculateStatsCommandHandler) Handle(command *CalculateStatsCommand) (*CalculateStatsCommandResult, error) {
+	bookingRequestVOs, err := h.bookingRequestTransformer.FromBookingRequestDTOs(command.BookingRequests)
 	if err != nil {
 		return nil, err
 	}
@@ -44,21 +36,6 @@ func (s CalculateStatsCommandHandler) Handle(command CalculateStatsCommand) (*Ca
 		MinNight: stats.MinNight(),
 		MaxNight: stats.MaxNight(),
 	}, nil
-}
-
-var InvalidCheckInFormatError = errors.New("invalid CheckIn format")
-func (s CalculateStatsCommandHandler) buildBookingRequestVOs(command CalculateStatsCommand) ([]domain.BookingRequest, error) {
-	var bookingRequestVOs []domain.BookingRequest
-	for _, bookingRequest := range command.BookingRequests {
-		checkIn, err := time.Parse("2006-01-02", bookingRequest.CheckIn)
-		if err != nil {
-			return []domain.BookingRequest{}, fmt.Errorf("%w:%v", InvalidCheckInFormatError, err)
-		}
-		bookingRequestVOs = append(
-			bookingRequestVOs,
-			domain.NewBookingRequest(bookingRequest.RequestId, checkIn, bookingRequest.Nights, bookingRequest.SellingRate, bookingRequest.Margin))
-	}
-	return bookingRequestVOs, nil
 }
 
 

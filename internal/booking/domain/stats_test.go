@@ -27,7 +27,7 @@ func TestStatsSuite(t *testing.T) {
 }
 
 func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenTwoBookingRequestsAreProvided() {
-	var bookingRequests []domain.BookingRequest
+	var bookingRequests []*domain.BookingRequest
 
 	bookataCheckIn := s.parseTimeFromDateString("2020-01-01")
 	kayeteCheckIn := s.parseTimeFromDateString("2020-01-04")
@@ -44,7 +44,7 @@ func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenTwoBookingRequestsAr
 }
 
 func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenThreeBookingRequestsAreProvided() {
-	var bookingRequests []domain.BookingRequest
+	var bookingRequests []*domain.BookingRequest
 
 	bookataCheckIn := s.parseTimeFromDateString("2020-01-01")
 	kayeteCheckIn := s.parseTimeFromDateString("2020-01-04")
@@ -63,7 +63,7 @@ func (s *StatsUnitSuite) TestShouldReturnStatsAsExpectedWhenThreeBookingRequests
 }
 
 func (s *StatsUnitSuite) TestShouldReturnMaximizedProfitStatsWhenFourBookingRequestsAreProvided() {
-	var bookingRequests []domain.BookingRequest
+	var bookingRequests []*domain.BookingRequest
 
 	bookataCheckIn := s.parseTimeFromDateString("2020-01-01")
 	kayeteCheckIn := s.parseTimeFromDateString("2020-01-04")
@@ -77,7 +77,7 @@ func (s *StatsUnitSuite) TestShouldReturnMaximizedProfitStatsWhenFourBookingRequ
 	bookingRequests = append(bookingRequests, domain.NewBookingRequest(atropoteRequestId, atropoteCheckIn, 4, 150, 6))
 	bookingRequests = append(bookingRequests, acmeRequest)
 
-	var expectedBookingRequests []domain.BookingRequest
+	var expectedBookingRequests []*domain.BookingRequest
 	expectedBookingRequests = append(expectedBookingRequests, bookataRequest)
 	expectedBookingRequests = append(expectedBookingRequests, acmeRequest)
 
@@ -98,7 +98,7 @@ func (s StatsUnitSuite) parseTimeFromDateString(dateString string) time.Time {
 
 func BenchmarkStats(b *testing.B) {
 	bookataCheckIn, _ := time.Parse(timeLayout, "2020-01-01")
-	bookingRequests := []domain.BookingRequest {
+	bookingRequests := []*domain.BookingRequest {
 		domain.NewBookingRequest(bookataRequestId, bookataCheckIn, 5, 200, 20),
 	}
 
@@ -114,7 +114,7 @@ func BenchmarkMaximize(b *testing.B) {
 	atropoteCheckIn, _ := time.Parse(timeLayout, "2020-01-04")
 	acmeCheckIn, _ := time.Parse(timeLayout, "2020-01-10")
 
-	bookingRequests := []domain.BookingRequest {
+	bookingRequests := []*domain.BookingRequest {
 		domain.NewBookingRequest(bookataRequestId, bookataCheckIn, 5, 200, 20),
 		domain.NewBookingRequest(kayeteRequestId, kayeteCheckIn, 4, 156, 5),
 		domain.NewBookingRequest(atropoteRequestId, atropoteCheckIn, 4, 150, 6),

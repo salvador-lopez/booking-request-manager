@@ -3,14 +3,14 @@ package domain
 import "math"
 
 type Stats struct {
-	bookingRequests []BookingRequest
+	bookingRequests []*BookingRequest
 	avgNight    float64
 	minNight    float64
 	maxNight    float64
 	totalProfit float64
 }
 
-func NewStats(bookingRequests []BookingRequest) Stats {
+func NewStats(bookingRequests []*BookingRequest) Stats {
 	s := Stats{bookingRequests: bookingRequests}
 
 	var totalProfit float64
@@ -49,16 +49,16 @@ func NewStats(bookingRequests []BookingRequest) Stats {
 	return s
 }
 
-func (s Stats) calculateProfit(bookingRequest BookingRequest) float64 {
+func (s Stats) calculateProfit(bookingRequest *BookingRequest) float64 {
 	return float64(bookingRequest.sellingRate) * (float64(bookingRequest.margin) / 100)
 }
 
-func (s Stats) calculateProfitPerNight(bookingRequest BookingRequest) float64 {
+func (s Stats) calculateProfitPerNight(bookingRequest *BookingRequest) float64 {
 	return s.calculateProfit(bookingRequest) / float64(bookingRequest.nights)
 }
 
-func NewMaximizedProfitStats(bookingRequests []BookingRequest) Stats {
-	noOverlappingCombinations := make([][]BookingRequest, len(bookingRequests))
+func NewMaximizedProfitStats(bookingRequests []*BookingRequest) Stats {
+	noOverlappingCombinations := make([][]*BookingRequest, len(bookingRequests))
 	for i, bookingRequest := range bookingRequests {
 		noOverlappingCombinations[i] = append(noOverlappingCombinations[i], bookingRequest)
 		for j := i+1; j < len(bookingRequests); j++ {
@@ -86,17 +86,7 @@ func NewMaximizedProfitStats(bookingRequests []BookingRequest) Stats {
 	return maxProfitStats
 }
 
-func (s Stats) calculateTotalProfit(bookingRequests []BookingRequest) float64 {
-	var totalProfit float64
-
-	for _, bookingRequest := range bookingRequests {
-		totalProfit += s.calculateProfit(bookingRequest)
-	}
-
-	return totalProfit
-}
-
-func (s Stats) BookingRequests() []BookingRequest {
+func (s Stats) BookingRequests() []*BookingRequest {
 	return s.bookingRequests
 }
 

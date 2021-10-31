@@ -1,10 +1,11 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="E2E Tests" type="GoTestRunConfiguration" factoryName="Go Test">
     <module name="booking-request-manager" />
-    <working_directory value="$PROJECT_DIR$" />
+    <working_directory value="$PROJECT_DIR$/cmd/api" />
     <go_parameters value="-i -tags=e2e" />
-    <kind value="DIRECTORY" />
-    <directory value="$PROJECT_DIR$" />
+    <kind value="PACKAGE" />
+    <package value="booking-request-manager/cmd/api" />
+    <directory value="$PROJECT_DIR$/cmd" />
     <filePath value="$PROJECT_DIR$" />
     <framework value="gotest" />
     <method v="2" />
