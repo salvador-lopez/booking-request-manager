@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  booking_request_manager:
+    container_name: container_booking_request_manager
+    image: server-image
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - CGO_ENABLED=0
+    ports:
+      - "8080:8080"
+    volumes:
+      - $PWD:/go/src/booking-request-manager
+  go_tests:
+    container_name: container_go_tests
+    image: test-image
+    environment:
+      - CGO_ENABLED=0
+    build:
+      dockerfile: Dockerfile.test
+      context: .
+    volumes:
+      - $PWD:/go/src/booking-request-manager
