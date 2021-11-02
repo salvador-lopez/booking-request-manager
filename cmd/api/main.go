@@ -4,7 +4,7 @@ import (
 	"booking-request-manager/internal/booking/application"
 	calculate_maximized_profit "booking-request-manager/internal/booking/application/maximize"
 	"booking-request-manager/internal/booking/application/stats"
-	"booking-request-manager/internal/booking/infrastructure/http/rest/controller"
+	controller2 "booking-request-manager/internal/booking/infrastructure/io/http/rest/controller"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,13 +28,13 @@ func main() {
 }
 
 func healthCheckHandler(context *gin.Context) {
-	controller.NewHealthCheckController().Run(context)
+	controller2.NewHealthCheckController().Run(context)
 }
 
 func postStatsHandler(context *gin.Context) {
-	controller.NewPostStatsController(stats.NewCalculateStatsCommandHandler(application.NewBookingRequestTransformer())).Run(context)
+	controller2.NewPostStatsController(stats.NewCalculateStatsCommandHandler(application.NewBookingRequestTransformer())).Run(context)
 }
 
 func postMaximizeHandler(context *gin.Context) {
-	controller.NewPostMaximizeController(calculate_maximized_profit.NewCalculateMaximizedProfitCommandHandler(application.NewBookingRequestTransformer())).Run(context)
+	controller2.NewPostMaximizeController(calculate_maximized_profit.NewCalculateMaximizedProfitCommandHandler(application.NewBookingRequestTransformer())).Run(context)
 }

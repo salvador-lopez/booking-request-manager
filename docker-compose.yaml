@@ -13,6 +13,7 @@ services:
       - "8080:8080"
     volumes:
       - $PWD:/go/src/booking-request-manager
+
   go_tests:
     container_name: container_go_tests
     image: test-image
@@ -20,6 +21,17 @@ services:
       - CGO_ENABLED=0
     build:
       dockerfile: Dockerfile.test
+      context: .
+    volumes:
+      - $PWD:/go/src/booking-request-manager
+
+  go_benchmark:
+    container_name: container_go_benchmark
+    image: benchmark-image
+    environment:
+      - CGO_ENABLED=0
+    build:
+      dockerfile: Dockerfile.bench
       context: .
     volumes:
       - $PWD:/go/src/booking-request-manager
