@@ -72,13 +72,11 @@ func NewMaximizedProfitStats(bookingRequests []*BookingRequest) Stats {
 		}
 	}
 
-	var maxTotalProfit float64
 	var maxProfitStats Stats
 
 	for _, noOverlappingCombination := range noOverlappingCombinations {
 		stats := NewStats(noOverlappingCombination)
-		if maxTotalProfit < stats.totalProfit {
-			maxTotalProfit = stats.totalProfit
+		if maxProfitStats.TotalProfit() < stats.TotalProfit() {
 			maxProfitStats = stats
 		}
 	}

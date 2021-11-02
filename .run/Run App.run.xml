@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Api" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="booking-request-manager" />
+    <working_directory value="$PROJECT_DIR$/cmd/api" />
+    <kind value="DIRECTORY" />
+    <package value="booking-request-manager" />
+    <directory value="$PROJECT_DIR$/cmd/api" />
+    <filePath value="$PROJECT_DIR$" />
+    <option name="build_on_remote_target" value="true" />
+    <method v="2" />
+  </configuration>
+</component>
