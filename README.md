@@ -63,9 +63,6 @@ This is configured to use the go installed in local machine, so you'll need to h
 - application: Here we find the command handlers (use cases)
 
 
-- infrastructure/persistence: Here we'll find the repository implementations, in this case the persistence layer is implemented using mongodb
-
-
 - infrastructure/io: Here we place all the specific ways to expose our application layer (command handlers). Now as we're exposing the "stats and maximize command handlers" using a http rest server we can find the following controllers:
     - infrastructure/io/http/rest/controller/health_check
     - infrastructure/io/http/rest/controller/stats
